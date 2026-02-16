@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Planner</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <h1>Budget Planner</h1>
+            <p class="subtitle">Your financial forecast</p>
+        </header>
+
+        <div class="current-month-display">
+            <div class="month-selector-wrapper">
+                <div class="month-display-dropdown" onclick="toggleMonthDropdown()">
+                    <span id="selectedMonthDisplay">January 8, 2026</span>
+                </div>
+                <div class="month-dropdown-menu" id="monthDropdownMenu">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <div class="balance-summary">
+            <div class="balance-column">
+                <span class="balance-summary-label" title="Enter your current balance">Starting Balance</span>
+                <input type="text" class="balance-summary-input" id="startingBalanceInput" value="$18,000" onfocus="selectStartingBalance()" onblur="formatAndSaveStartingBalance()" onkeypress="if(event.key==='Enter') this.blur()">
+            </div>
+            <div class="balance-arrow">
+                <span class="arrow-icon" onclick="toggleBudgetPanels()" title="Click to show/hide details">&rarr;</span>
+                <div class="toggle-arrows">
+                    <span class="toggle-arrow up-arrow" onclick="showIncomeOnly()" title="Show income only">&#9650;</span>
+                    <span class="toggle-arrow down-arrow" onclick="showExpensesOnly()" title="Show expenses only">&#9660;</span>
+                </div>
+            </div>
+            <div class="balance-column">
+                <span class="balance-summary-label" title="Starting balance, plus all expected income, less expenses">Projected Balance</span>
+                <div class="balance-summary-value clickable-balance" id="endingBalanceDisplay" onclick="toggleBudgetPanels()" title="Click to show/hide details">$0</div>
+            </div>
+        </div>
+
+        <div id="budgetContent" class="loading" style="display: none;">Loading your budget data...</div>
+
+        <div class="controls-bar bottom-controls">
+            <div class="data-controls">
+                <button class="btn export-btn" onclick="exportData()">&#8595; Export</button>
+                <button class="btn import-btn" onclick="document.getElementById('importFile').click()">&#8593; Import</button>
+                <input type="file" id="importFile" class="hidden-input" accept=".json" onchange="importData(event)">
+            </div>
+        </div>
+    </div>
+
+    <!-- New Date Modal -->
+    <div class="modal" id="newDateModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Create New Date</h3>
+            <label for="newDatePicker" class="modal-label">Select a date:</label>
+            <input type="date" id="newDatePicker" class="modal-input date-picker-input">
+            <div class="modal-buttons">
+                <button class="btn-save" onclick="createNewMonthFromPicker()">Create</button>
+                <button class="btn-cancel" onclick="hideNewDateModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <h3 class="modal-title">About Your Data</h3>
+            <div class="info-box">
+                <p><strong>Automatic Saving:</strong> Your data is automatically saved to your browser as you type.</p>
+                <p><strong>Export Backups:</strong> Click "Export" to download a JSON file with all your budget data.</p>
+                <p><strong>Import Backups:</strong> Click "Import" to restore data from a previously exported file.</p>
+                <p><strong>Data Ownership:</strong> Keep regular backups! Clearing browser data will delete your budgets.</p>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-save" onclick="hideInfoModal()">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

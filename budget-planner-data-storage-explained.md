@@ -2,31 +2,26 @@
 
 ## Where Your Data Lives
 
-Your budget data is stored **locally in your web browser** using two storage methods:
+Your budget data is stored **locally in your web browser** using localStorage.
 
-### 1. Primary Storage: Browser's Persistent Storage API
+### localStorage
 - **Location**: Built into your browser (Chrome, Firefox, Safari, etc.)
-- **Technology**: `window.storage` API (if available)
+- **Technology**: `localStorage` API
 - **Visibility**: Private to you, stored on your device only
-
-### 2. Fallback Storage: localStorage
-- **Location**: Also in your browser
-- **Technology**: `localStorage` (older, more compatible API)
-- **Purpose**: Backup if persistent storage fails
 
 ## How It Works
 
 ### Storage Key Format
-Each month's budget is stored with a unique key:
+Each date's budget is stored with a unique key:
 ```
-budget:January 2026
-budget:February 2026
-budget:March 2026
+budget:1.8.26
+budget:2.15.26
+budget:3.1.26
 ...etc
 ```
 
 ### Data Structure
-Each month stores a JSON object like this:
+Each date stores a JSON object like this:
 ```json
 {
   "startingBalance": 18000,
@@ -46,7 +41,9 @@ Each month stores a JSON object like this:
   ],
   "customCategories": {
     "income": {"displayName": "Income Items", "type": "income"},
-    "credit": {"displayName": "Credit Cards", "type": "expense"}
+    "credit": {"displayName": "Credit Cards", "type": "expense"},
+    "monthly": {"displayName": "Recurring Expenses", "type": "expense"},
+    "utils": {"displayName": "Utilities", "type": "expense"}
   }
 }
 ```
@@ -54,35 +51,35 @@ Each month stores a JSON object like this:
 ## Key Functions
 
 ### Saving Data
-**Function**: `saveBudget()`
+**Function**: `saveBudget()` / `saveBudgetData()`
 - Triggered automatically when you:
   - Add/edit/delete an item
   - Change amounts
   - Modify category names
   - Update starting balance
-- Saves to: `localStorage.setItem('budget:January 2026', JSON.stringify(data))`
+- Saves to: `localStorage.setItem('budget:1.8.26', JSON.stringify(data))`
 
 ### Loading Data
-**Function**: `getCurrentBudgetData()`
+**Function**: `loadBudgetData()`
 - Called when:
   - Page loads
-  - You switch months
+  - You switch dates
   - You import data
-- Reads from: `localStorage.getItem('budget:January 2026')`
+- Reads from: `localStorage.getItem('budget:1.8.26')`
 
 ### Export/Import
-**Export**: Downloads all months as a single JSON file
-**Import**: Reads the JSON file and saves each month back to localStorage
+**Export**: Downloads all dates as a single JSON file
+**Import**: Reads the JSON file and saves each date back to localStorage
 
 ## Important Notes
 
-### ✅ Advantages
+### Advantages
 - **No account needed** - works immediately
 - **Private** - data never leaves your device
 - **Fast** - instant load/save
 - **Offline** - works without internet
 
-### ⚠️ Limitations
+### Limitations
 - **Device-specific** - data only exists on this browser/device
 - **Can be cleared** - clearing browser data deletes your budget
 - **Not synced** - won't sync to other devices
@@ -120,15 +117,15 @@ You can view your stored data in the browser:
 ## Summary
 
 **Your data is stored:**
-- ✅ In your browser (localStorage)
-- ✅ On your device only
-- ✅ Automatically when you make changes
-- ✅ For each month separately
+- In your browser (localStorage)
+- On your device only
+- Automatically when you make changes
+- For each date separately
 
 **Your data is NOT:**
-- ❌ Sent to any server
-- ❌ Shared with anyone
-- ❌ Synced to the cloud
-- ❌ Accessible from other devices
+- Sent to any server
+- Shared with anyone
+- Synced to the cloud
+- Accessible from other devices
 
 This is a **client-side-only** application - all data storage happens in your browser, which gives you complete privacy and control!
